@@ -1,5 +1,4 @@
-/** @format */
-
+/** @format **/
 import {
   Scene,
   Engine,
@@ -7,7 +6,7 @@ import {
   FreeCamera,
   Vector3,
   HemisphericLight,
-  FlyCameraKeyboardInput,
+  UniversalCamera,
 } from "@babylonjs/core";
 
 export class BasicScene {
@@ -26,8 +25,20 @@ export class BasicScene {
   CreateScene(): Scene {
     const scene = new Scene(this.engine);
 
-    const camera = new FreeCamera("camera", new Vector3(0, 1, 0), this.scene);
-    camera.attachControl(this.canvas, true);
+    const Freecamera = new FreeCamera(
+      "camera",
+      new Vector3(1, 1, 1),
+      this.scene
+    );
+    const UniCam = new UniversalCamera(
+      "camera2",
+      new Vector3(1, 1, 1),
+      this.scene
+    );
+    UniCam.attachControl(this.canvas, true);
+
+    Freecamera._position = new Vector3(2, 2, 2);
+    Freecamera.target = new Vector3(0.28, 1, 0.5);
 
     const light = new HemisphericLight(
       "light",

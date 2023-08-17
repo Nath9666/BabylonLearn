@@ -1,19 +1,21 @@
+<!-- @format -->
+
 <template>
   <div>
-    <h3>Babylon Exemple</h3>
+    <h3>Material Exemple</h3>
     <canvas></canvas>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { BasicScene } from "@/BabylonExemples/BasicScene";
+import { Material } from "@/BabylonExemples/Material";
 
 export default defineComponent({
   name: "babylonExemple",
   mounted() {
     const canvas = document.querySelector("canvas")!;
-    new BasicScene(canvas);
+    new Material(canvas);
   },
 });
 </script>
@@ -21,7 +23,7 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 canvas {
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 100%;
 }
 </style>
