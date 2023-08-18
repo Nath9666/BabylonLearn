@@ -2,7 +2,6 @@
 
 <template>
   <div>
-    <h3>Material Exemple</h3>
     <canvas></canvas>
   </div>
 </template>
@@ -21,9 +20,11 @@ export default defineComponent({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 canvas {
-  width: 80%;
+  display: flex;
+  width: 100%;
   height: 100%;
+  background-color: #000; /* black */
 }
 </style>
