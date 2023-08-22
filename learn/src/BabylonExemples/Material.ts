@@ -8,7 +8,8 @@ import {
   HemisphericLight,
   StandardMaterial,
   Texture,
-  TextureBlock,
+  ActionManager,
+  ExecuteCodeAction,
 } from "@babylonjs/core";
 
 export class Material {
@@ -63,6 +64,26 @@ export class Material {
     ball.material = this.CreateBallMaterial();
     ground.material = this.CreateBallMaterial();
 
+    // change position of the ball when click on the ground
+    ground.actionManager = new ActionManager(this.scene);
+    ground.actionManager.registerAction(
+      new ExecuteCodeAction(
+        {
+          trigger: ActionManager.OnPickTrigger,
+        },
+        (event) => {
+          const pickResult = this.scene.pick(
+            this.scene.pointerX,
+            this.scene.pointerY
+          );
+          const pos = pickResult.pickedPoint;
+          ball.position.x = pos!.x;
+          ball.position.y = 0.5;
+          ball.position.z = pos!.z;
+        }
+      )
+    );
+
     return scene;
   }
 
@@ -82,7 +103,7 @@ export class Material {
       "./textures/gray_stone/grey_stone_path_nor_gl_1k.jpg",
       this.scene
     );
-    NormalTexture.level = 0.5;
+    NormalTexture.level = 1;
     GroundMat.bumpTexture = NormalTexture;
     TextArray.push(NormalTexture);
 
