@@ -12,6 +12,8 @@ export class Material {
     this.engine.runRenderLoop(() => {
       this.scene.render();
       this.engine.resize();
+
+      this.scene.getMeshByName("testText")!.rotation.y += 0.01;
     });
   }
 
@@ -28,6 +30,8 @@ export class Material {
 
     Freecamera._position = new BABYLON.Vector3(2, 2, 2);
     Freecamera.target = new BABYLON.Vector3(0.28, 1, 0.5);
+
+    Freecamera.keysUp.push(90); // touche z
 
     const light = new BABYLON.HemisphericLight(
       "light",
@@ -56,7 +60,7 @@ export class Material {
     );
 
     // define ball position on axis y by one
-    ball.position.y = 1;
+    ball.position.y = 0.5;
 
     // assign greyStone Material on ball and ground
     ball.material = this.GreyStoneMaterial();
@@ -79,7 +83,7 @@ export class Material {
             );
             const pos = pickResult.pickedPoint;
             ball.position = pos!;
-            ball.position.y = ball.getBoundingInfo().boundingSphere.radius;
+            ball.position.y = ball.getBoundingInfo().boundingSphere.radius / 2;
           }
         }
       )
