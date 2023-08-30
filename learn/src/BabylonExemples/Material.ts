@@ -32,6 +32,18 @@ export class Material {
     Freecamera.target = new BABYLON.Vector3(0.28, 1, 0.5);
 
     Freecamera.keysUp.push(90); // touche z
+    Freecamera.keysDown.push(83); // touche s
+    Freecamera.keysLeft.push(81); // touche q
+    Freecamera.keysRight.push(68); // touche d
+    Freecamera.keysUpward.push(32); // touche espace
+    Freecamera.keysDownward.push(16); // touche shift
+
+    Freecamera.keysUp.unshift(38); // touche flèche haut
+
+    //https://forum.babylonjs.com/t/collisions-in-camera-and-meshes/15903
+    //https://doc.babylonjs.com/features/featuresDeepDive/cameras/camera_collisions
+    //https://playground.babylonjs.com/#1M79PT#1
+    //https://playground.babylonjs.com/#4HUQQ#2485
 
     const light = new BABYLON.HemisphericLight(
       "light",
