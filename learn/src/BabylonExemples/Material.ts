@@ -1,85 +1,86 @@
 /** @format **/
-import {
-  Scene,
-  Engine,
-  MeshBuilder,
-  FreeCamera,
-  Vector3,
-  HemisphericLight,
-  StandardMaterial,
-  Texture,
-  ActionManager,
-  ExecuteCodeAction,
-} from "@babylonjs/core";
+import * as BABYLON from "@babylonjs/core";
 
 export class Material {
-  scene: Scene;
-  engine: Engine;
+  scene: BABYLON.Scene;
+  engine: BABYLON.Engine;
 
   constructor(private canvas: HTMLCanvasElement) {
-    this.engine = new Engine(this.canvas, true);
+    this.engine = new BABYLON.Engine(this.canvas, true);
     this.scene = this.CreateScene();
 
     this.engine.runRenderLoop(() => {
       this.scene.render();
+      this.engine.resize();
     });
   }
 
-  CreateScene(): Scene {
-    const scene = new Scene(this.engine);
+  CreateScene(): BABYLON.Scene {
+    const scene = new BABYLON.Scene(this.engine);
 
-    const Freecamera = new FreeCamera(
+    const Freecamera = new BABYLON.FreeCamera(
       "camera",
-      new Vector3(1, 1, 1),
+      new BABYLON.Vector3(1, 1, 1),
       this.scene
     );
     Freecamera.attachControl();
     Freecamera.speed = 0.25;
 
-    Freecamera._position = new Vector3(2, 2, 2);
-    Freecamera.target = new Vector3(0.28, 1, 0.5);
+    Freecamera._position = new BABYLON.Vector3(2, 2, 2);
+    Freecamera.target = new BABYLON.Vector3(0.28, 1, 0.5);
 
-    const light = new HemisphericLight(
+    const light = new BABYLON.HemisphericLight(
       "light",
-      new Vector3(0, 1, 0),
+      new BABYLON.Vector3(0, 1, 0),
       this.scene
     );
 
     light.intensity = 0.7;
 
-    const ground = MeshBuilder.CreateGround(
+    const ground = BABYLON.MeshBuilder.CreateGround(
       "ground",
       { width: 6, height: 6 },
       this.scene
     );
 
-    const ball = MeshBuilder.CreateSphere(
+    const ball = BABYLON.MeshBuilder.CreateSphere(
       "shere",
       { diameter: 1, segments: 32 },
       this.scene
     );
 
+    const cube = BABYLON.MeshBuilder.CreateBox(
+      "testText",
+      { size: 1 },
+      this.scene
+    );
+
+    // define ball position on axis y by one
     ball.position.y = 1;
 
-    ball.material = this.CreateBallMaterial();
-    ground.material = this.CreateBallMaterial();
+    // assign greyStone Material on ball and ground
+    ball.material = this.GreyStoneMaterial();
+    ground.material = this.GreyStoneMaterial();
+    cube.material = this.GreyStoneMaterial();
 
     // change position of the ball when click on the ground
-    ground.actionManager = new ActionManager(this.scene);
+    ground.actionManager = new BABYLON.ActionManager(this.scene);
     ground.actionManager.registerAction(
-      new ExecuteCodeAction(
+      new BABYLON.ExecuteCodeAction(
         {
-          trigger: ActionManager.OnPickTrigger,
+          trigger: BABYLON.ActionManager.OnPickTrigger,
         },
         (event) => {
-          const pickResult = this.scene.pick(
-            this.scene.pointerX,
-            this.scene.pointerY
-          );
-          const pos = pickResult.pickedPoint;
-          ball.position.x = pos!.x;
-          ball.position.y = 0.5;
-          ball.position.z = pos!.z;
+          // si la touche shift est appuyé
+          if (event.sourceEvent.shiftKey) {
+            const pickResult = this.scene.pick(
+              this.scene.pointerX,
+              this.scene.pointerY
+            );
+            const pos = pickResult.pickedPoint;
+            ball.position = pos!;
+            ball.position.y = ball.getBoundingInfo().boundingSphere.radius;
+          }
         }
       )
     );
@@ -87,19 +88,19 @@ export class Material {
     return scene;
   }
 
-  CreateBallMaterial(): StandardMaterial {
-    const GroundMat = new StandardMaterial("greyStone", this.scene);
+  GreyStoneMaterial(): BABYLON.StandardMaterial {
+    const GroundMat = new BABYLON.StandardMaterial("greyStone", this.scene);
     const uvScale = 4;
-    const TextArray: Texture[] = [];
+    const TextArray: BABYLON.Texture[] = [];
 
-    const diffuseText = new Texture(
+    const diffuseText = new BABYLON.Texture(
       "./textures/gray_stone/grey_stone_path_diff_1k.jpg",
       this.scene
     );
     GroundMat.diffuseTexture = diffuseText;
     TextArray.push(diffuseText);
 
-    const NormalTexture = new Texture(
+    const NormalTexture = new BABYLON.Texture(
       "./textures/gray_stone/grey_stone_path_nor_gl_1k.jpg",
       this.scene
     );
@@ -107,7 +108,7 @@ export class Material {
     GroundMat.bumpTexture = NormalTexture;
     TextArray.push(NormalTexture);
 
-    const AO = new Texture(
+    const AO = new BABYLON.Texture(
       "./textures/gray_stone/grey_stone_path_ao_1k.jpg",
       this.scene
     );

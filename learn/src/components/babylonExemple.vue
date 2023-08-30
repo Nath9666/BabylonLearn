@@ -22,9 +22,8 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 canvas {
-  display: flex;
   width: 100%;
   height: 100%;
-  background-color: #000; /* black */
+  touch-action: none;
 }
 </style>

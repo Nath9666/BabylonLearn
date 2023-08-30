@@ -7,6 +7,7 @@ import {
   Vector3,
   HemisphericLight,
   UniversalCamera,
+  Mesh,
 } from "@babylonjs/core";
 
 export class BasicScene {
